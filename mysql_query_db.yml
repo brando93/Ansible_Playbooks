@@ -7,6 +7,7 @@
     ansible_python_interpreter: /usr/bin/python3
     database: "backend"  # Specify the database
   tasks:
+
     - name: "Connect to MYSQL and USE {{ database }}"
       community.mysql.mysql_query:
         login_user: "{{ username }}"
@@ -15,24 +16,32 @@
         login_db: "{{ database }}"
         query: "SELECT 1;"
       register: mysql_connection_result
-    
-    - name: "INSERT values into DB {{ database }}"
-      community.mysql.mysql_query:
-        query: |
-          INSERT INTO {{ database }} (name, bcit_id)
-          VALUES ('John Doe', 'BCIT123'),
-                 ('Alice Smith', 'BCIT456');
-      register: insert_output
-    
-    - name: "Debug INSERT output"
-      debug:
-        msg: "{{ insert_output }}"
-    
+
     - name: "SELECT all from table {{ database }}"
       community.mysql.mysql_query:
+        login_db: "{{ database }}"
         query: "SELECT * FROM {{ database }}"
       register: select_all_output
 
     - name: "Debug SELECT all output"
       debug:
         msg: "{{ select_all_output }}"
+    
+    - name: "INSERT values into DB {{ database }}"
+      community.mysql.mysql_query:
+        login_db: "{{ database }}"
+        query: |
+          INSERT IGNORE INTO {{ database }} (name, bcit_id)
+          VALUES ('Josh Kane', 'BCIT132'),
+                 ('Tim Burton', 'BCIT341');
+  
+
+    - name: "Count how many records in {{ backend }}"
+      community.mysql.mysql_query:
+        login_db: "{{ database }}"
+        query: "SELECT COUNT(*) FROM backend;"
+      register: count_output
+    
+    - name: "Debug COUNT output"
+      debug:
+        msg: "{{ count_output }}"
