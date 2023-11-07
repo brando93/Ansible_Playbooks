@@ -32,8 +32,8 @@
         login_db: "{{ database }}"
         query: |
           INSERT IGNORE INTO {{ database }} (name, bcit_id)
-          VALUES ('Josh Kane', 'BCIT132'),
-                 ('Tim Burton', 'BCIT341');
+          VALUES ('Charles Oliveira', 'BCIT766'),
+                 ('Mario Camacho', 'BCIT111');
   
 
     - name: "Count how many records in {{ backend }}"
